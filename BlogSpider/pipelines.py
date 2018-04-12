@@ -8,6 +8,7 @@
 from .items import BlogspiderItem
 from tomd import Tomd
 import time
+from lxml import html
 
 
 class BlogspiderPipeline(object):
@@ -22,11 +23,16 @@ class BlogspiderPipeline(object):
 
     def process_runoob(self, item):
         body = item['body']
+        utf8_parser = html.HTMLParser(encoding='utf8')
+        body_tree = html.fromstring(body, parser=utf8_parser)
+        body_tree.find('.//h1').drop_tree()
+        body = html.tostring(body_tree, encoding="utf-8")
         file_title = item['title_hash']
         title = item['title']
+        print(body.decode())
         with open('mdfiles/{}.md'.format(file_title),
                   'w', encoding='utf-8') as file:
             tmp = time.strftime("%Y-%m-%d %X")
             file.write(self.file_head.format(title, tmp))
-            file.write(Tomd(body).markdown)
+            file.write(Tomd(body.decode()).markdown)
             file.write(self.foot.format(item['url']))
