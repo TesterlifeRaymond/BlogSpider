@@ -6,10 +6,9 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 from .items import BlogspiderItem
-from tomd import Tomd
 import time
 from lxml import html
-
+import html2text
 
 class BlogspiderPipeline(object):
     def __init__(self):
@@ -29,10 +28,10 @@ class BlogspiderPipeline(object):
         body = html.tostring(body_tree, encoding="utf-8")
         file_title = item['title_hash']
         title = item['title']
-        print(body.decode())
         with open('mdfiles/{}.md'.format(file_title),
                   'w', encoding='utf-8') as file:
             tmp = time.strftime("%Y-%m-%d %X")
             file.write(self.file_head.format(title, tmp))
-            file.write(Tomd(body.decode()).markdown)
+            body = html2text.html2text(body.decode())
+            file.write(body)
             file.write(self.foot.format(item['url']))
