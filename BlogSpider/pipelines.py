@@ -9,6 +9,7 @@ from .items import BlogspiderItem
 import time
 from lxml import html
 import html2text
+from tomd import Tomd
 
 
 class BlogspiderPipeline(object):
@@ -38,6 +39,6 @@ class BlogspiderPipeline(object):
             self.tag = self.tags[item['category']]
             tmp = time.strftime("%Y-%m-%d %X")
             file.write(self.file_head.format(title=title, date=tmp, tags=self.tag))
-            body = html2text.html2text(body.decode())
+            body = Tomd(body.decode()).markdown
             file.write(body)
             file.write(self.foot.format(item['url']))
