@@ -10,9 +10,10 @@ import time
 from lxml import html
 import html2text
 
+
 class BlogspiderPipeline(object):
     def __init__(self):
-        self.file_head = """---\ntitle: {}\ndate: {}\ntags:\n\t- Python\n---"""
+        self.file_head = """---\ntitle: {}\ndate: {}\ntags:\n\t- Python\n---\n"""
         self.foot = "\n> 文章来源于转载, 如有疑问, 请联系我,转载地址:{} "
 
     def process_item(self, item, spider):
@@ -24,7 +25,6 @@ class BlogspiderPipeline(object):
         body = item['body']
         utf8_parser = html.HTMLParser(encoding='utf8')
         body_tree = html.fromstring(body, parser=utf8_parser)
-        body_tree.find('.//h1').drop_tree()
         body = html.tostring(body_tree, encoding="utf-8")
         file_title = item['title_hash']
         title = item['title']

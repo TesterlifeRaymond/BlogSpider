@@ -8,4 +8,4 @@
 """
 from scrapy.cmdline import execute
 
-execute("scrapy crawl pythontab".split())
+execute("scrapy crawl jianshu".split())

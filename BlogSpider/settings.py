@@ -19,7 +19,7 @@ NEWSPIDER_MODULE = 'BlogSpider.spiders'
 #USER_AGENT = 'BlogSpider (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -99,3 +99,12 @@ ITEM_PIPELINES = {
 
 SPLASH_URL = 'http://47.75.7.60:8050/'
 HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+
+
+HEADERS = {
+    "Host": "www.jianshu.com",
+    "Origin": "https://www.jianshu.com",
+    "Referer": "https://www.jianshu.com/c/22f2ca261b85",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)"
+                  "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"""
+}
