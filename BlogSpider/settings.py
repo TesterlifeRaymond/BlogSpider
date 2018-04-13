@@ -104,7 +104,7 @@ HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
 HEADERS = {
     "Host": "www.jianshu.com",
     "Origin": "https://www.jianshu.com",
-    "Referer": "https://www.jianshu.com/c/22f2ca261b85",
+    "Referer": "{}",
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6)"
                   "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"""
 }

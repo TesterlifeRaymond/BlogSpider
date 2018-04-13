@@ -20,22 +20,28 @@ class JianShu(Spider):
         start_urls = ['https://www.jianshu.com/c/22f2ca261b85',
                       'https://www.jianshu.com/c/22f2ca261b85?order_by=top']
         for item in start_urls:
+            self.settings['HEADERS']['Referer'] = item
             yield Request(item, callback=self.parse, headers=self.settings['HEADERS'])
 
     def parse(self, response):
+        meta = {"category": 1 if 'top' in response.url else 0}
         result = response.xpath('//*[@class="note-list"]/li/a')
         for item in result:
             yield Request(self.base_url + item.xpath('@href').extract()[0],
                           callback=self.get_page_info,
-                          headers=self.settings['HEADERS'])
+                          headers=self.settings['HEADERS'],
+                          meta=meta
+                          )
 
     def get_page_info(self, response):
         item = BlogspiderItem()
         title = response.xpath('//*[@class="title"]/text()').extract()[0]
         title_hash = md5(title.encode()).hexdigest()
+        category = response.meta['category']
         body = response.xpath('//*[@class="show-content"]').extract()[0]
         item['title'] = title
         item['title_hash'] = title_hash
         item['body'] = body
         item['url'] = response.url
+        item['category'] = category
         yield item

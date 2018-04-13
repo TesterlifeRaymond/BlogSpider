@@ -13,7 +13,7 @@ import html2text
 
 class BlogspiderPipeline(object):
     def __init__(self):
-        self.file_head = "---\ntitle: {title}\ndate: {date}\ntags:\n\t- Python\n\t - {tags}\n---\n"
+        self.file_head = "---\ntitle: {title}\ndate: {date}\ntags:\n\t- Python\n\t- {tags}\n---\n"
         self.foot = "\n> 文章来源于转载, 如有疑问, 请联系我,转载地址:{} "
         self.tag = None
         self.tags = {
@@ -35,7 +35,7 @@ class BlogspiderPipeline(object):
         title = item['title']
         with open('mdfiles/{}.md'.format(file_title),
                   'w', encoding='utf-8') as file:
-            self.tag = self.tags[1] if 'hot' in item['url'] else self.tags[0]
+            self.tag = self.tags[item['category']]
             tmp = time.strftime("%Y-%m-%d %X")
             file.write(self.file_head.format(title=title, date=tmp, tags=self.tag))
             body = html2text.html2text(body.decode())
