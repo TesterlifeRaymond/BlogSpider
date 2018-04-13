@@ -18,7 +18,8 @@ class BlogspiderPipeline(object):
         self.tag = None
         self.tags = {
             0: "最新收录",
-            1: "热门推荐"
+            1: "热门推荐",
+            2: "Crawl"
         }
 
     def process_item(self, item, spider):
@@ -34,7 +35,6 @@ class BlogspiderPipeline(object):
             if "data-original-src" in _item.attrib.keys():
                 _item.attrib['src'] = _item.attrib['data-original-src']
         body = html.tostring(body_tree, encoding="utf-8")
-        print(html.fromstring(body).xpath('//img/@src'))
         file_title = item['title_hash']
         title = item['title']
         with open('mdfiles/{}.md'.format(file_title),
