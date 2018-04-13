@@ -17,8 +17,10 @@ class JianShu(Spider):
     base_url = 'http://www.jianshu.com'
     
     def start_requests(self):
-        start_urls = 'https://www.jianshu.com/c/22f2ca261b85'
-        yield Request(start_urls, callback=self.parse, headers=self.settings['HEADERS'])
+        start_urls = ['https://www.jianshu.com/c/22f2ca261b85',
+                      'https://www.jianshu.com/c/22f2ca261b85?order_by=top']
+        for item in start_urls:
+            yield Request(item, callback=self.parse, headers=self.settings['HEADERS'])
 
     def parse(self, response):
         result = response.xpath('//*[@class="note-list"]/li/a')
@@ -26,7 +28,7 @@ class JianShu(Spider):
             yield Request(self.base_url + item.xpath('@href').extract()[0],
                           callback=self.get_page_info,
                           headers=self.settings['HEADERS'])
-        
+
     def get_page_info(self, response):
         item = BlogspiderItem()
         title = response.xpath('//*[@class="title"]/text()').extract()[0]

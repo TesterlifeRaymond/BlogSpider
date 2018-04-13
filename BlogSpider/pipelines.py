@@ -13,8 +13,13 @@ import html2text
 
 class BlogspiderPipeline(object):
     def __init__(self):
-        self.file_head = "---\ntitle: {}\ndate: {}\ntags:\n\t- Python\n\t -%s\n---\n"
+        self.file_head = "---\ntitle: {title}\ndate: {date}\ntags:\n\t- Python\n\t - {tags}\n---\n"
         self.foot = "\n> 文章来源于转载, 如有疑问, 请联系我,转载地址:{} "
+        self.tag = None
+        self.tags = {
+            0: "最新收录",
+            1: "热门推荐"
+        }
 
     def process_item(self, item, spider):
         if isinstance(item, BlogspiderItem):
@@ -23,10 +28,6 @@ class BlogspiderPipeline(object):
 
     def process_runoob(self, item):
         body = item['body']
-        if 'hot' not in item['url']:
-            self.file_head = self.file_head % "最新收录"
-        else:
-            self.file_head = self.file_head % "热门推荐"
         utf8_parser = html.HTMLParser(encoding='utf8')
         body_tree = html.fromstring(body, parser=utf8_parser)
         body = html.tostring(body_tree, encoding="utf-8")
@@ -34,8 +35,9 @@ class BlogspiderPipeline(object):
         title = item['title']
         with open('mdfiles/{}.md'.format(file_title),
                   'w', encoding='utf-8') as file:
+            self.tag = self.tags[1] if 'hot' in item['url'] else self.tags[0]
             tmp = time.strftime("%Y-%m-%d %X")
-            file.write(self.file_head.format(title, tmp))
+            file.write(self.file_head.format(title=title, date=tmp, tags=self.tag))
             body = html2text.html2text(body.decode())
             file.write(body)
             file.write(self.foot.format(item['url']))
