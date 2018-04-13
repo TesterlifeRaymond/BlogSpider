@@ -9,7 +9,6 @@ from .items import BlogspiderItem
 import time
 from lxml import html
 import html2text
-from tomd import Tomd
 
 
 class BlogspiderPipeline(object):
@@ -31,7 +30,11 @@ class BlogspiderPipeline(object):
         body = item['body']
         utf8_parser = html.HTMLParser(encoding='utf8')
         body_tree = html.fromstring(body, parser=utf8_parser)
+        for _item in body_tree.xpath('//img'):
+            if "data-original-src" in _item.attrib.keys():
+                _item.attrib['src'] = _item.attrib['data-original-src']
         body = html.tostring(body_tree, encoding="utf-8")
+        print(html.fromstring(body).xpath('//img/@src'))
         file_title = item['title_hash']
         title = item['title']
         with open('mdfiles/{}.md'.format(file_title),
@@ -39,6 +42,6 @@ class BlogspiderPipeline(object):
             self.tag = self.tags[item['category']]
             tmp = time.strftime("%Y-%m-%d %X")
             file.write(self.file_head.format(title=title, date=tmp, tags=self.tag))
-            body = Tomd(body.decode()).markdown
+            body = html2text.html2text(body.decode())
             file.write(body)
             file.write(self.foot.format(item['url']))

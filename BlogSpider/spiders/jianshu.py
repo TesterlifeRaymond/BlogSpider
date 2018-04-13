@@ -7,9 +7,11 @@
 @License: MIT
 """
 
+import os
 from hashlib import md5
 from scrapy import Spider, Request
 from ..items import BlogspiderItem
+from scrapy_splash import SplashRequest, SlotPolicy
 
 
 class JianShu(Spider):
@@ -21,21 +23,28 @@ class JianShu(Spider):
                       'https://www.jianshu.com/c/22f2ca261b85?order_by=top']
         for item in start_urls:
             self.settings['HEADERS']['Referer'] = item
-            yield Request(item, callback=self.parse, headers=self.settings['HEADERS'])
+            yield Request(item, callback=self.parse, headers=self.settings['HEADERS'],
+                    dont_filter=True)
 
     def parse(self, response):
         meta = {"category": 1 if 'top' in response.url else 0}
         result = response.xpath('//*[@class="note-list"]/li/a')
         for item in result:
-            yield Request(self.base_url + item.xpath('@href').extract()[0],
+            url = self.base_url + item.xpath('@href').extract()[0]
+            yield Request(url,
                           callback=self.get_page_info,
                           headers=self.settings['HEADERS'],
-                          meta=meta
+                          meta=meta,
+                          dont_filter=True,
                           )
 
     def get_page_info(self, response):
         item = BlogspiderItem()
-        title = response.xpath('//*[@class="title"]/text()').extract()[0]
+        try:
+            title = response.xpath('//*[@class="title"]/text()').extract()[0]
+        except:
+            print(response.text)
+            os._exit(0)
         title_hash = md5(title.encode()).hexdigest()
         category = response.meta['category']
         body = response.xpath('//*[@class="show-content"]').extract()[0]
