@@ -13,7 +13,7 @@ import html2text
 
 class BlogspiderPipeline(object):
     def __init__(self):
-        self.file_head = """---\ntitle: {}\ndate: {}\ntags:\n\t- Python\n---\n"""
+        self.file_head = "---\ntitle: {}\ndate: {}\ntags:\n\t- Python\n\t -%s\n---\n"
         self.foot = "\n> 文章来源于转载, 如有疑问, 请联系我,转载地址:{} "
 
     def process_item(self, item, spider):
@@ -23,6 +23,10 @@ class BlogspiderPipeline(object):
 
     def process_runoob(self, item):
         body = item['body']
+        if 'hot' not in item['url']:
+            self.file_head = self.file_head % "最新收录"
+        else:
+            self.file_head = self.file_head % "热门推荐"
         utf8_parser = html.HTMLParser(encoding='utf8')
         body_tree = html.fromstring(body, parser=utf8_parser)
         body = html.tostring(body_tree, encoding="utf-8")
