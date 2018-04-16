@@ -47,15 +47,14 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 SPIDER_MIDDLEWARES = {
-    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100
-   # 'BlogSpider.middlewares.BlogspiderSpiderMiddleware': 543,
+    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+    'BlogSpider.middlewares.BlogspiderSpiderMiddleware': 543,
 }
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     # 'BlogSpider.middlewares.MyCustomDownloaderMiddleware': 543,
-    'CrawlerUtility.scrapy_utility.ScrapyUtility.AbuyunProxyMiddleware': 548,
     'scrapy_splash.SplashCookiesMiddleware': 723,
     'scrapy_splash.SplashMiddleware': 725,
     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
@@ -110,24 +109,11 @@ HEADERS = {
                   "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"""
 }
 
-
-WECHAT_HEADERS = {
-    "Host": "weixin.sogou.com",
-    "Referer": "http://weixin.sogou.com/weixinwap?ie=utf8&s_from=input&type=2&t={}&pg=webSearchList&_sug_=n&_sug_type_=&query=python",
-    "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Mobile Safari/537.36",
-    "X-Requested-With": "XMLHttpRequest",
-    "Upgrade-Insecure-Requests": 1,
-    "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-    'Accept-Encoding': 'gzip, deflate',
-    "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
-    "Cache-Control": "max-age=0",
-    "Connection": "keep-alive",
+DAY_HEADERS = {
+    "Host": "www.jianshu.com",
+    "Origin": "https://www.jianshu.com",
+    "Referer": "https://www.jianshu.com/search?q=python&page=1&type=note",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
+    "X-CSRF-Token": "{}",
+    "Accept": "application/json"
 }
-
-
-ABUYUN_PROXY_SERVER = 'http://http-dyn.abuyun.com:9020'
-ABUYUN_PROXY_USER = ''  # must be set
-ABUYUN_PROXY_PASSWORD = ''  # must be set
-SPIDER_BEHIND_PROXY = ['wechat']
-SKIP_PROXY_KEYWORD = []
-DUPEFILTER_DEBUG = True

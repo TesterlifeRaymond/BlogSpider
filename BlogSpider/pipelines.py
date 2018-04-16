@@ -20,7 +20,6 @@ class BlogspiderPipeline(object):
             0: "最新收录",
             1: "热门推荐",
             2: "Crawl",
-            3: "每日微信"
         }
 
     def process_item(self, item, spider):
@@ -35,6 +34,9 @@ class BlogspiderPipeline(object):
         for _item in body_tree.xpath('//img'):
             if "data-original-src" in _item.attrib.keys():
                 _item.attrib['src'] = _item.attrib['data-original-src']
+            
+            elif "data-croporisrc" in _item.attrib.keys():
+                _item.attrib['src'] = _item.attrib['data-croporisrc']
         body = html.tostring(body_tree, encoding="utf-8")
         file_title = item['title_hash']
         title = item['title']
