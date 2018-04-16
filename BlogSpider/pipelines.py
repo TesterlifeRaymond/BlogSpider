@@ -19,7 +19,8 @@ class BlogspiderPipeline(object):
         self.tags = {
             0: "最新收录",
             1: "热门推荐",
-            2: "Crawl"
+            2: "Crawl",
+            3: "每日微信"
         }
 
     def process_item(self, item, spider):
