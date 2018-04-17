@@ -42,14 +42,19 @@ class BlogspiderPipeline(object):
         body = html.tostring(body_tree, encoding="utf-8")
         file_title = item['title_hash']
         title = item['title']
-        with open('mdfiles/{}.md'.format(file_title),
-                  'w', encoding='utf-8') as file:
-            self.tag = self.tags[item['category']]
-            tmp = time.strftime("%Y-%m-%d %X")
-            file.write(self.file_head.format(title=title, date=tmp, tags=self.tag))
-            body = html2text.html2text(body.decode())
-            file.write(body)
-            file.write(self.foot.format(item['url']))
+        if "培训" in title:
+            return
+        elif "达内" in title:
+            return
+        else:
+            with open('mdfiles/{}.md'.format(file_title),
+                      'w', encoding='utf-8') as file:
+                self.tag = self.tags[item['category']]
+                tmp = time.strftime("%Y-%m-%d %X")
+                file.write(self.file_head.format(title=title, date=tmp, tags=self.tag))
+                body = html2text.html2text(body.decode())
+                file.write(body)
+                file.write(self.foot.format(item['url']))
 
     def process_shibor(self, item):
         tmp = """
@@ -72,5 +77,5 @@ class BlogspiderPipeline(object):
                 _item.attrib['src'] = "http://www.shibor.org" + _item.attrib['src']
         body = html.tostring(body_tree, encoding='utf-8').decode().replace(
             "window.open('/shibor", "window.open('http://www.shibor.org/shibor")
-        with open('test.html', 'w', encoding='utf-8') as file:
+        with open('shibor_day.html', 'w', encoding='utf-8') as file:
             file.write(tmp.format(body))
