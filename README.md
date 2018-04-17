@@ -11,9 +11,8 @@
 并将文章生成后生成Hexoblog的静态页面, 所有文章中标注了文章来源, 转载声明
 
 
-* Sample: [Raymond's Blog](!"http://testerlife.com/")
+> Sample: [Raymond's Blog](http://testerlife.com/)
 
 * 爬虫会每日自动采集新的文章, 生成md文件后更新blog
-* 由于html转markdown可能存在未知的错误, 所以我们建议在离线生成部分应用[hint-markdown语法检查工具](!"https://github.com/hustcc/hint")来检查md文件是否可以生成静态页面
+* 由于html转markdown可能存在未知的错误, 所以我们建议在离线生成部分应用[hint-markdown语法检查工具](https://github.com/hustcc/hint)来检查md文件是否可以生成静态页面
 * 后续会持续更新, 目前没发现更多问题
-
