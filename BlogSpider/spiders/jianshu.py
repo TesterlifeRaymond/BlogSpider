@@ -24,7 +24,7 @@ class JianShu(Spider):
         for item in start_urls:
             self.settings['HEADERS']['Referer'] = item
             yield Request(item, callback=self.parse, headers=self.settings['HEADERS'],
-                    dont_filter=True)
+                          dont_filter=True)
 
     def parse(self, response):
         meta = {"category": 1 if 'top' in response.url else 0}

@@ -40,7 +40,7 @@ class JianShu(Spider):
                 continue
             url = self.base_url + did
             yield Request(url, self.get_page_info, headers=self.settings['HEADERS'])
-    
+
     def get_page_info(self, response):
         item = BlogspiderItem()
         title = response.xpath('//*[@class="title"]/text()').extract()[0]

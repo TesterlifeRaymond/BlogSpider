@@ -5,7 +5,7 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
-from .items import BlogspiderItem
+from .items import BlogspiderItem, ShiBorItem
 import time
 from lxml import html
 import html2text
@@ -25,6 +25,8 @@ class BlogspiderPipeline(object):
     def process_item(self, item, spider):
         if isinstance(item, BlogspiderItem):
             self.process_runoob(item)
+        elif isinstance(item, ShiBorItem):
+            self.process_shibor(item)
         return item
 
     def process_runoob(self, item):
@@ -34,7 +36,7 @@ class BlogspiderPipeline(object):
         for _item in body_tree.xpath('//img'):
             if "data-original-src" in _item.attrib.keys():
                 _item.attrib['src'] = _item.attrib['data-original-src']
-            
+
             elif "data-croporisrc" in _item.attrib.keys():
                 _item.attrib['src'] = _item.attrib['data-croporisrc']
         body = html.tostring(body_tree, encoding="utf-8")
@@ -48,3 +50,27 @@ class BlogspiderPipeline(object):
             body = html2text.html2text(body.decode())
             file.write(body)
             file.write(self.foot.format(item['url']))
+
+    def process_shibor(self, item):
+        tmp = """
+        
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+    <meta charset="utf-8">
+</head>
+<body>
+{}
+</body>
+</html>
+        """
+        utf8_parser = html.HTMLParser(encoding='utf-8')
+        body_tree = html.fromstring(item['html'], parser=utf8_parser)
+        for _item in body_tree.xpath('//img'):
+            if "src" in _item.attrib.keys():
+                _item.attrib['src'] = "http://www.shibor.org" + _item.attrib['src']
+        body = html.tostring(body_tree, encoding='utf-8').decode().replace(
+            "window.open('/shibor", "window.open('http://www.shibor.org/shibor")
+        with open('test.html', 'w', encoding='utf-8') as file:
+            file.write(tmp.format(body))

@@ -18,3 +18,7 @@ class BlogspiderItem(scrapy.Item):
 
     def __repr__(self):
         return "====================="
+
+
+class ShiBorItem(scrapy.Item):
+    html = scrapy.Field()
