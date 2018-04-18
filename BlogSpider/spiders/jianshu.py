@@ -52,6 +52,7 @@ class JianShu(Spider):
         except:
             print(response.text)
             os._exit(0)
+        item['publish_time'] = response.xpath('//*[@class="publish-time"]/text()').extract()[0]
         title_hash = md5(title.encode()).hexdigest()
         category = response.meta['category']
         body = response.xpath('//*[@class="show-content"]').extract()[0]

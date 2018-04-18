@@ -43,6 +43,7 @@ class JianShu(Spider):
 
     def get_page_info(self, response):
         item = BlogspiderItem()
+        item['publish_time'] = response.xpath('//*[@class="publish-time"]/text()').extract()[0]
         title = response.xpath('//*[@class="title"]/text()').extract()[0]
         title_hash = md5(title.encode()).hexdigest()
         body = response.xpath('//*[@class="show-content"]').extract()[0]

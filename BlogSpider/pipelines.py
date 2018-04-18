@@ -32,7 +32,6 @@ class BlogspiderPipeline(object):
 
     def process_runoob(self, item):
         body = item['body']
-        tmp = time.strftime("%Y-%m-%d %X")
         utf8_parser = html.HTMLParser(encoding='utf8')
         body_tree = html.fromstring(body, parser=utf8_parser)
         for _item in body_tree.xpath('//img'):
@@ -54,10 +53,10 @@ class BlogspiderPipeline(object):
                 self.tag = self.tags[item['category']]
                 if isinstance(self.tag, list):
                     file_head = self.file_head.replace('Python', self.tag[0]).format(
-                        title=title, date=tmp, tags=self.tag[1])
+                        title=title, date=item['publish_time'], tags=self.tag[1])
                 else:
                     file_head = self.file_head.format(
-                        title=title, date=tmp, tags=self.tag)
+                        title=title, date=item['publish_time'], tags=self.tag)
                 file.write(file_head)
                 body = html2text.html2text(body.decode())
                 file.write(body)

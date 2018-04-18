@@ -14,6 +14,7 @@ class BlogspiderItem(scrapy.Item):
     title_hash = scrapy.Field()
     title = scrapy.Field()
     url = scrapy.Field()
+    publish_time = scrapy.Field()
     category = scrapy.Field()
 
     def __repr__(self):
