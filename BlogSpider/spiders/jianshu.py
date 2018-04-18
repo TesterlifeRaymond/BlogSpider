@@ -20,14 +20,21 @@ class JianShu(Spider):
     
     def start_requests(self):
         start_urls = ['https://www.jianshu.com/c/22f2ca261b85',
-                      'https://www.jianshu.com/c/22f2ca261b85?order_by=top']
+                      'https://www.jianshu.com/c/22f2ca261b85?order_by=top',
+                      'https://www.jianshu.com/c/5AUzod?order_by=hot']
         for item in start_urls:
             self.settings['HEADERS']['Referer'] = item
             yield Request(item, callback=self.parse, headers=self.settings['HEADERS'],
                           dont_filter=True)
 
     def parse(self, response):
-        meta = {"category": 1 if 'top' in response.url else 0}
+        category = 0
+        if 'top' in response.url:
+            category = 1
+        elif 'hot' in response.url:
+            category = 3
+        
+        meta = {"category": category}
         result = response.xpath('//*[@class="note-list"]/li/a')
         for item in result:
             url = self.base_url + item.xpath('@href').extract()[0]

@@ -20,6 +20,7 @@ class BlogspiderPipeline(object):
             0: "最新收录",
             1: "热门推荐",
             2: "Crawl",
+            3: ["在路上", "旅行"]
         }
 
     def process_item(self, item, spider):
@@ -31,6 +32,7 @@ class BlogspiderPipeline(object):
 
     def process_runoob(self, item):
         body = item['body']
+        tmp = time.strftime("%Y-%m-%d %X")
         utf8_parser = html.HTMLParser(encoding='utf8')
         body_tree = html.fromstring(body, parser=utf8_parser)
         for _item in body_tree.xpath('//img'):
@@ -50,8 +52,13 @@ class BlogspiderPipeline(object):
             with open('mdfiles/{}.md'.format(file_title),
                       'w', encoding='utf-8') as file:
                 self.tag = self.tags[item['category']]
-                tmp = time.strftime("%Y-%m-%d %X")
-                file.write(self.file_head.format(title=title, date=tmp, tags=self.tag))
+                if isinstance(self.tag, list):
+                    file_head = self.file_head.replace('Python', self.tag[0]).format(
+                        title=title, date=tmp, tags=self.tag[1])
+                else:
+                    file_head = self.file_head.format(
+                        title=title, date=tmp, tags=self.tag)
+                file.write(file_head)
                 body = html2text.html2text(body.decode())
                 file.write(body)
                 file.write(self.foot.format(item['url']))
