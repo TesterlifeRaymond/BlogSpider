@@ -5,6 +5,7 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
+import os
 from .items import BlogspiderItem, ShiBorItem
 import time
 from lxml import html
@@ -36,7 +37,7 @@ class BlogspiderPipeline(object):
         body_tree = html.fromstring(body, parser=utf8_parser)
         for _item in body_tree.xpath('//img'):
             if "data-original-src" in _item.attrib.keys():
-                _item.attrib['src'] = _item.attrib['data-original-src']
+                _item.attrib['src'] = "http:" + _item.attrib.pop('data-original-src')
 
             elif "data-croporisrc" in _item.attrib.keys():
                 _item.attrib['src'] = _item.attrib['data-croporisrc']
