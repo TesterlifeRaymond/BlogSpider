@@ -11,7 +11,6 @@ import os
 from hashlib import md5
 from scrapy import Spider, Request
 from ..items import BlogspiderItem
-from scrapy_splash import SplashRequest, SlotPolicy
 
 
 class JianShu(Spider):
